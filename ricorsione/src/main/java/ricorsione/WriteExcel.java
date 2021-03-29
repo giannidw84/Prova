@@ -35,27 +35,36 @@ public class WriteExcel {
 
 		// Create a Row
 		Row headerRow = sheet.createRow(0);
+		
+		// Creo la lista dei titoli delle colonne
+		ArrayList<String> listaTitoliColonne = new ArrayList<String>();
+		listaTitoliColonne.add("ServiceId");
+		listaTitoliColonne.add("NodeName");
+		listaTitoliColonne.add("NodeType");
+		listaTitoliColonne.add("GroupType");
+		listaTitoliColonne.add("FlowType");
+		listaTitoliColonne.add("ResourceId");
 
 		// Prepara titoli delle colonne
-		ArrayList<String> columns = excelHeader(listExcel);
+		ArrayList<String> rigaTitoli = excelHeader(listExcel, listaTitoliColonne);
 
 		// Scrive i titoli delle colonne
-		for (int i = 0; i < columns.size(); i++) {
+		for (int i = 0; i < rigaTitoli.size(); i++) {
 			Cell cell = headerRow.createCell(i);
-			cell.setCellValue(columns.get(i));
+			cell.setCellValue(rigaTitoli.get(i));
 			cell.setCellStyle(headerCellStyle);
 		}
 
 		// Scrive le righe di dettaglio
 		int rowCount = 0;
 
-		for (Excel aExcel : listExcel) {
+		for (Excel lExcel : listExcel) {
 			Row row = sheet.createRow(++rowCount);
-			writeDetail(aExcel, row, this.maxProfondita);
+			writeDetail(lExcel, row, this.maxProfondita);
 		}
 
 		// Resize all columns to fit the content size
-		for (int i = 0; i < columns.size(); i++) {
+		for (int i = 0; i < rigaTitoli.size(); i++) {
 			sheet.autoSizeColumn(i);
 		}
 
@@ -64,7 +73,7 @@ public class WriteExcel {
 		}
 	}
 
-	private ArrayList<String> excelHeader(List<Excel> listExcel) {
+	private ArrayList<String> excelHeader(List<Excel> listExcel,ArrayList<String> listaTitoliColonne) {
 
 		// determina il numero di celle profondità, prendendo il valore massimo di
 		// PROFONDITA
@@ -76,22 +85,22 @@ public class WriteExcel {
 			}
 		}
 
-		System.out.println("Numero di celle profondita: " + maxProfondita);
+		//System.out.println("Numero di celle profondita: " + maxProfondita);
 
 		// crea intestazione colonne
 		ArrayList<String> title = new ArrayList<String>();
 
+		int x = 0;
+		
 		// ciclo per scrivere i numeri 0, 1, 2, 3 .... nel titolo
 		for (int i = 0; i <= maxProfondita; i++) {
 			title.add(Integer.toString(i));
 		}
 
-		title.add("ServiceId");
-		title.add("NodeName");
-		title.add("NodeType");
-		title.add("GroupType");
-		title.add("FlowType");
-		title.add("ResourceId");
+		// ciclo per scrivere i titoli
+		for (int i = 0; i < listaTitoliColonne.size(); i++) {
+			title.add(listaTitoliColonne.get(i));
+		}
 		
 		return title;
 	}

@@ -31,18 +31,18 @@ public class App {
 //      read file JSON
 		try {
 			Gson gson = new Gson();
-			MenuContent fgson = gson.fromJson(new FileReader(prop.getProperty("file.path.in")), MenuContent.class);
+			MenuContent menuContent = gson.fromJson(new FileReader(prop.getProperty("file.path.in")), MenuContent.class);
 
 // preparo ed eseguo ricorsione
-			EseguiRicorsione ric = new EseguiRicorsione();
+			ElaboraNodi nodi = new ElaboraNodi();
 			int profondita = -1;
-			List<MenuNode> nodeList = fgson.getNodes();
+			List<MenuNode> nodeList = menuContent.getNodes();
 			List<Excel> excel = new ArrayList<>();
-			ric.esegui(nodeList, profondita, excel);
+			nodi.caricaListaExcel(nodeList, profondita, excel);
 
 // preparazione scrittura su excel				
 			WriteExcel wexcel = new WriteExcel();
-			String sheetName = "Menu " + fgson.getVersion();
+			String sheetName = "Menu " + menuContent.getVersion();
 			wexcel.writeExcel(excel, prop.getProperty("file.path.out"), sheetName);
 
 		} catch (Exception e) {
