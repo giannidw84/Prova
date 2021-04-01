@@ -38,14 +38,13 @@ public class App {
 //      read file JSON
 		try {
 			Gson gson = new Gson();
-			MenuContent menuContent = gson.fromJson(new FileReader(prop.getProperty("file.path.in")),
-					MenuContent.class);
+			MenuContent menuContent = gson.fromJson(new FileReader(prop.getProperty("file.path.in")), MenuContent.class);
 
 // preparo ed eseguo ricorsione
 			NodeProcessing node = new NodeProcessing();
 			int treeNode = 0;
 			List<MenuNode> nodeList = menuContent.getNodes();
-			List<RowData> rowForExcel = new ArrayList<>();
+			List<RowData> rowForExcel = new ArrayList<RowData>();
 			node.loadRow(nodeList, treeNode, rowForExcel);
 
 // Creo la lista dei titoli delle colonne
@@ -61,29 +60,29 @@ public class App {
 // Creo la lista di dettaglio
 
 			List<List<String>> rowsData = new ArrayList<List<String>>();
-			for (int i = 0; i < rowForExcel.size(); i++) {
+			for(RowData rowData : rowForExcel) {
 
-				List<String> rowData = new ArrayList<String>();
+				List<String> rowValues = new ArrayList<String>();
 
-				rowData.add(Integer.toString(rowForExcel.get(i).getProfondita()));
+				rowValues.add(Integer.toString(rowData.getProfondita()));
 
-				if (rowForExcel.get(i).getServiceId() == 0) {
-					rowData.add("");
+				if (rowData.getServiceId() == 0) {
+					rowValues.add("");
 				} else {
-					rowData.add(Integer.toString(rowForExcel.get(i).getServiceId()));
+					rowValues.add(Integer.toString(rowData.getServiceId()));
 				}
 
-				rowData.add(rowForExcel.get(i).getNodeName());
-				rowData.add(rowForExcel.get(i).getNodeType());
-				rowData.add(rowForExcel.get(i).getGroupType());
-				rowData.add(rowForExcel.get(i).getFlowType());
+				rowValues.add(rowData.getNodeName());
+				rowValues.add(rowData.getNodeType());
+				rowValues.add(rowData.getGroupType());
+				rowValues.add(rowData.getFlowType());
 
-				if (rowForExcel.get(i).getResourceId() == 0) {
-					rowData.add("");
+				if (rowData.getResourceId() == 0) {
+					rowValues.add("");
 				} else {
-					rowData.add(Integer.toString(rowForExcel.get(i).getResourceId()));
+					rowValues.add(Integer.toString(rowData.getResourceId()));
 				}
-				rowsData.add(i, rowData);
+				rowsData.add(rowValues);
 			}
 
 // preparazione scrittura su excel

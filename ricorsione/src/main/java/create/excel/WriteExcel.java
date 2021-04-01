@@ -18,8 +18,7 @@ public class WriteExcel {
 
 	private int maxTreeNode = 0;
 
-	public void writeExcel(ArrayList<String> titleData, List<List<String>> rowsData, String excelFilePath,
-			String sheetName) throws IOException {
+	public void writeExcel(ArrayList<String> titleData, List<List<String>> rowsData, String excelFilePath, String sheetName) throws IOException {
 
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet(sheetName);
@@ -52,7 +51,7 @@ public class WriteExcel {
 
 		for (List<String> rowData : rowsData) {
 			Row row = sheet.createRow(++rowCount);
-			writeRow(rowData, row, this.maxTreeNode);
+			writeRow(rowData, row);
 		}
 
 		// Resize all columns to fit the content size
@@ -62,6 +61,8 @@ public class WriteExcel {
 
 		try (FileOutputStream outputStream = new FileOutputStream(excelFilePath)) {
 			workbook.write(outputStream);
+		}finally {
+			workbook.close();
 		}
 	}
 
@@ -92,29 +93,24 @@ public class WriteExcel {
 		return title;
 	}
 
-	private void writeRow(List<String> rowData, Row row, int maxTreeNode) {
+	private void writeRow(List<String> rowData, Row row) {
 
-		int x = 0;
+		int cellIndex = 0;
+		for (; cellIndex <= maxTreeNode; cellIndex++) {
 
-		for (int i = 0; i <= maxTreeNode; i++) {
+			Cell cell = row.createCell(cellIndex);
 
-			Cell cell = row.createCell(i);
-
-			if (i == Integer.parseInt(rowData.get(0))) {
-
+			if (cellIndex == Integer.parseInt(rowData.get(0))) {
 				cell.setCellValue("X");
 			} else {
 				cell.setCellValue(" ");
 			}
-			x = i;
 		}
 
 		for (int i = 1; i < rowData.size(); i++) {
-			x++;
-			Cell cell = row.createCell(x);
+			Cell cell = row.createCell(++cellIndex);
 			cell.setCellValue(rowData.get(i));
 		}
-
 	}
 
 }

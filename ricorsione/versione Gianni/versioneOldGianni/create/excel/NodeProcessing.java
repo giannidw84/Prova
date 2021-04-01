@@ -8,7 +8,9 @@ public class NodeProcessing {
 
 	public void loadRow(List<MenuNode> nodeList, int treeNode, List<RowData> rowForExcel) throws Exception {
 
-			for (MenuNode menuNode : nodeList) {
+		if (nodeList != null) {
+
+			for (int i = 0; i < nodeList.size(); i++) {
 
 				int serviceId = 0;
 				String nodeName = "";
@@ -17,25 +19,25 @@ public class NodeProcessing {
 				String flowType = "";
 				int resourceId = 0;
 
-				if (menuNode.getNodeName() != null) {
-					nodeName = menuNode.getNodeName();
+				if (nodeList.get(i).getNodeName() != null) {
+					nodeName = nodeList.get(i).getNodeName();
 				}
 
-				if (menuNode.getNodeType() != null) {
-					nodeType = menuNode.getNodeType();
+				if (nodeList.get(i).getNodeType() != null) {
+					nodeType = nodeList.get(i).getNodeType();
 				}
 
-				if (menuNode.getGroupType() != null) {
-					groupType = menuNode.getGroupType();
+				if (nodeList.get(i).getGroupType() != null) {
+					groupType = nodeList.get(i).getGroupType();
 				}
-				if (menuNode.getFlowType() != null) {
-					flowType = menuNode.getFlowType();
+				if (nodeList.get(i).getFlowType() != null) {
+					flowType = nodeList.get(i).getFlowType();
 				}
-				if (menuNode.getResource() != null) {
-					resourceId = menuNode.getResource().getId();
+				if (nodeList.get(i).getResource() != null) {
+					resourceId = nodeList.get(i).getResource().getId();
 				}
 				if (nodeType.contains("service")) {
-					serviceId = menuNode.getNodeId();
+					serviceId = nodeList.get(i).getNodeId();
 				}
 
 				rowForExcel.add(new RowData(treeNode, serviceId, nodeName, nodeType, groupType, flowType, resourceId));
@@ -48,8 +50,11 @@ public class NodeProcessing {
 //				System.out.println("flowType: " + flowType);
 //				System.out.println("resourceId: " + resourceId);
 
-				loadRow(menuNode.getNodes(), treeNode + 1, rowForExcel);
+				List<MenuNode> nodeListNew = nodeList.get(i).getNodes();
+				loadRow(nodeListNew, treeNode + 1, rowForExcel);
 			}
+
+		}
 
 	}
 }
