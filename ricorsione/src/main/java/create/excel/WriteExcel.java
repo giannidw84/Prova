@@ -106,7 +106,9 @@ public class WriteExcel {
 				cell.setCellValue(" ");
 			}
 		}
-
+		
+		cellIndex--;
+		
 		for (int i = 1; i < rowData.size(); i++) {
 			Cell cell = row.createCell(++cellIndex);
 			cell.setCellValue(rowData.get(i));
